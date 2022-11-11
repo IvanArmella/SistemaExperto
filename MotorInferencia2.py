@@ -37,6 +37,24 @@ class Tabla1(KnowledgeEngine):
         super(Tabla1, self).__init__()
         self.resultado=()
 
+    @Rule(AS.casa<<Casa(tamano=MATCH.p & P(lambda p: p>250)))
+    def r6(self,casa):
+        self.modify(casa,red="Wifi",repetidores="0-1")
+        self.resultado=self.facts.added
+        self.halt()
+    
+    @Rule(AS.casa<<Casa(tamano=MATCH.p & P(lambda p: p>=150 and p<=250) ))
+    def r5(self,casa):
+        self.modify(casa,red="Bluetooth",repetidores="2-3")
+        self.resultado=self.facts.added
+        self.halt()
+
+    @Rule(AS.casa<<Casa(tamano=MATCH.p & P(lambda p: p<150)))
+    def r4(self,casa):
+        self.modify(casa,red="Bluetooth",repetidores="0-1")
+        self.resultado=self.facts.added
+        self.halt()
+
     @Rule(Cliente(presupuesto='Alto'))
     def r3(self):
         #self.resultado.append(">=6")                                                      
@@ -116,23 +134,6 @@ class Tabla2(KnowledgeEngine):
         super(Tabla2, self).__init__()
         self.resultado=()
 
-    @Rule(AS.casa<<Casa(tamano=MATCH.p & P(lambda p: p>250)))
-    def r6(self,casa):
-        self.modify(casa,red="Wifi",repetidores="0-1")
-        self.resultado=self.facts.added
-        self.halt()
-    
-    @Rule(AS.casa<<Casa(tamano=MATCH.p & P(lambda p: p>=150 and p<=250) ))
-    def r5(self,casa):
-        self.modify(casa,red="Bluetooth",repetidores="2-3")
-        self.resultado=self.facts.added
-        self.halt()
-
-    @Rule(AS.casa<<Casa(tamano=MATCH.p & P(lambda p: p<150)))
-    def r4(self,casa):
-        self.modify(casa,red="Bluetooth",repetidores="0-1")
-        self.resultado=self.facts.added
-        self.halt()
 
 class Tabla3(KnowledgeEngine):
     def __init__(self):
