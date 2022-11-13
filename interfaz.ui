@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>interfaz</class>
+ <widget class="QMainWindow" name="interfaz">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -26,6 +26,7 @@
     <property name="font">
      <font>
       <pointsize>13</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -116,6 +117,7 @@
     <property name="font">
      <font>
       <pointsize>13</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -175,6 +177,7 @@
     <property name="font">
      <font>
       <pointsize>19</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -261,6 +264,7 @@
     <property name="font">
      <font>
       <pointsize>15</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -280,11 +284,64 @@
     <property name="font">
      <font>
       <pointsize>15</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="text">
      <string>750</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="edt_respuesta">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>240</y>
+      <width>251</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chbox_opc1">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>420</y>
+      <width>70</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CheckBox</string>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chbox_opc2">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>420</y>
+      <width>70</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CheckBox</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chbox_opc3">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>420</y>
+      <width>70</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CheckBox</string>
     </property>
    </widget>
    <zorder>table_presupuesto</zorder>
@@ -301,6 +358,10 @@
    <zorder>btn_salir</zorder>
    <zorder>lbl_txt_total</zorder>
    <zorder>lbl_total</zorder>
+   <zorder>edt_respuesta</zorder>
+   <zorder>chbox_opc1</zorder>
+   <zorder>chbox_opc2</zorder>
+   <zorder>chbox_opc3</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
