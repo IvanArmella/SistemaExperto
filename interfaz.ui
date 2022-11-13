@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>interfaz</class>
  <widget class="QMainWindow" name="interfaz">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -91,7 +94,6 @@
          <property name="font">
           <font>
            <pointsize>19</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -134,7 +136,7 @@
        <number>30</number>
       </property>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,2">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,2">
         <property name="spacing">
          <number>19</number>
         </property>
@@ -146,7 +148,6 @@
           <property name="font">
            <font>
             <pointsize>13</pointsize>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -202,27 +203,82 @@ QLineEdit:focus{
           </item>
           <item>
            <widget class="QCheckBox" name="chbox_opc1">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="styleSheet">
-             <string notr="true">
-
-</string>
+             <string notr="true">QCheckBox{
+	boder: 2px solid rgb(0,0,0);
+	padding: 5px;
+}
+QCheckBox::indicator
+{
+	width:15px;
+	height:15px;
+	border: 2px solid rgb(0,0,0);
+	border-radius:5px;
+	background-color:rgb(255,255,255)
+}
+QCheckBox::indicator:checked{
+	background-color:#04e762;
+}</string>
             </property>
             <property name="text">
-             <string>CheckBox</string>
+             <string>opc1</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="chbox_opc2">
+            <property name="styleSheet">
+             <string notr="true">QCheckBox{
+	boder: 2px solid rgb(0,0,0);
+	padding: 5px;
+}
+QCheckBox::indicator
+{
+	width:15px;
+	height:15px;
+	border: 2px solid rgb(0,0,0);
+	border-radius:5px;
+	background-color:rgb(255,255,255)
+}
+QCheckBox::indicator:checked{
+	background-color:#04e762;
+}</string>
+            </property>
             <property name="text">
-             <string>CheckBox</string>
+             <string>opc2</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="chbox_opc3">
+            <property name="styleSheet">
+             <string notr="true">QCheckBox{
+	boder: 2px solid rgb(0,0,0);
+	padding: 5px;
+}
+QCheckBox::indicator
+{
+	width:15px;
+	height:15px;
+	border: 2px solid rgb(0,0,0);
+	border-radius:5px;
+	background-color:rgb(255,255,255)
+}
+QCheckBox::indicator:checked{
+	background-color:#04e762;
+}</string>
+            </property>
             <property name="text">
-             <string>CheckBox</string>
+             <string>opc3</string>
             </property>
            </widget>
           </item>
@@ -327,24 +383,10 @@ QPushButton:pressed{
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <property name="spacing">
-           <number>50</number>
-          </property>
-          <property name="leftMargin">
-           <number>100</number>
-          </property>
-          <property name="rightMargin">
-           <number>100</number>
-          </property>
-         </layout>
-        </item>
-        <item>
          <widget class="QLabel" name="label_2">
           <property name="font">
            <font>
             <pointsize>13</pointsize>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -407,7 +449,6 @@ QPushButton:pressed{
           <property name="font">
            <font>
             <pointsize>19</pointsize>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -455,6 +496,18 @@ QPushButton:pressed{
           </property>
           <column>
            <property name="text">
+            <string>Imagen</string>
+           </property>
+           <property name="background">
+            <color>
+             <red>255</red>
+             <green>255</green>
+             <blue>255</blue>
+            </color>
+           </property>
+          </column>
+          <column>
+           <property name="text">
             <string>Descripción</string>
            </property>
           </column>
@@ -495,7 +548,6 @@ QPushButton:pressed{
             <property name="font">
              <font>
               <pointsize>15</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -509,7 +561,6 @@ QPushButton:pressed{
             <property name="font">
              <font>
               <pointsize>15</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
