@@ -337,66 +337,6 @@ QPushButton:pressed{
           <property name="rightMargin">
            <number>100</number>
           </property>
-          <item>
-           <widget class="QPushButton" name="btn_opc4">
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>28</height>
-             </size>
-            </property>
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton{
-	border:1px solid;
-	border-radius:12px;
-	background-color:#c6e2e9;
-}
-QPushButton:hover{
-	font-weight: bold;
-}
-QPushButton:pressed{
-	background-color:#a7bed3;
-	border:2px solid;
-}</string>
-            </property>
-            <property name="text">
-             <string>Opción 4</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btn_opc5">
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>28</height>
-             </size>
-            </property>
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton{
-	border:1px solid;
-	border-radius:12px;
-	background-color:#c6e2e9;
-}
-QPushButton:hover{
-	font-weight: bold;
-}
-QPushButton:pressed{
-	background-color:#a7bed3;
-	border:2px solid;
-}</string>
-            </property>
-            <property name="text">
-             <string>Opción 5</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
@@ -513,18 +453,6 @@ QPushButton:pressed{
           <property name="sortingEnabled">
            <bool>true</bool>
           </property>
-          <column>
-           <property name="text">
-            <string>Imagen</string>
-           </property>
-           <property name="background">
-            <color>
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </property>
-          </column>
           <column>
            <property name="text">
             <string>Descripción</string>

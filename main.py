@@ -1,7 +1,6 @@
 ﻿# -⁻- coding: UTF-8 -*-
-from itertools import product
 import sys
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,QtCore,QtPrintSupport,QtGui
 from interfaz import Ui_interfaz
 from Universal import universal
 from MotorInferencia import *
@@ -12,12 +11,12 @@ class ssbbcc(QtWidgets.QMainWindow):
     def __init__(self):
         super(ssbbcc, self).__init__()
         self.hechos=[]
-        self.cantidad=0
+        self.documento = QtGui.QTextDocument()
         self.interfaz=Ui_interfaz()
         self.interfaz.setupUi(self)
-        self.cantidadBocas=[]
-        self.cantidadVentanas=[]
         self.paso1() 
+        self.interfaz.btn_salir.clicked.connect(self.close)
+        self.interfaz.btn_imprimir.clicked.connect(self.imprimir)
         self.show()
 
     def actualizar(self, declared_fact, **modifiers):
@@ -34,10 +33,22 @@ class ssbbcc(QtWidgets.QMainWindow):
                 yield (k, v)
 
     def paso1(self):
+        try:
+            self.interfaz.btn_opc1.clicked.disconnect()
+        except TypeError: pass
+        try:
+            self.interfaz.btn_opc2.clicked.disconnect()
+        except TypeError: pass
+        try:
+            self.interfaz.btn_opc3.clicked.disconnect()
+        except TypeError: pass
         self.interfaz.lbl_pregunta.setText("¿Qué tanto quiere gastar para domotizar?")
         self.interfaz.btn_opc1.setText("Poco")
         self.interfaz.btn_opc2.setText("Normal")
-        self.interfaz.btn_opc3.setText("Mucho")     
+        self.interfaz.btn_opc3.setText("Mucho")
+        self.interfaz.btn_opc1.setVisible(True)
+        self.interfaz.btn_opc2.setVisible(True)
+        self.interfaz.btn_opc3.setVisible(True)
         self.interfaz.btn_opc1.clicked.connect(lambda: self.elegirPresupuesto(1))
         self.interfaz.btn_opc2.clicked.connect(lambda: self.elegirPresupuesto(2))
         self.interfaz.btn_opc3.clicked.connect(lambda: self.elegirPresupuesto(3))
@@ -205,6 +216,9 @@ class ssbbcc(QtWidgets.QMainWindow):
                 self.interfaz.btn_opc2.clicked.disconnect()
                 self.interfaz.btn_opc3.clicked.disconnect()
             except TypeError: pass
+            self.interfaz.chbox_opc1.setVisible(False)
+            self.interfaz.chbox_opc2.setVisible(False)
+            self.interfaz.chbox_opc3.setVisible(False)  
             self.interfaz.btn_opc2.setVisible(True) 
             self.interfaz.btn_opc3.setVisible(False) 
             self.interfaz.lbl_pregunta.setText("¿Qué tipo de iluminacion desea en la habitación {}?".format(str(ambiente["id"])))
@@ -234,7 +248,7 @@ class ssbbcc(QtWidgets.QMainWindow):
         if self.interfaz.edt_respuesta.text()!="":
             x=int(self.interfaz.edt_respuesta.text())
             if x>0:
-                self.cantidadBocas.append((i,x))
+                self.hechos[len(self.hechos)-1]=self.actualizar(self.hechos[len(self.hechos)-1],cantBocas=x)
                 self.paso9(i,max)
             else:
                 QtWidgets.QMessageBox.information(self, "Mensaje", "Error: Cantidad ingresada invalida.",QtWidgets.QMessageBox.Ok)
@@ -297,7 +311,7 @@ class ssbbcc(QtWidgets.QMainWindow):
         if self.interfaz.edt_respuesta.text()!="":
             x=int(self.interfaz.edt_respuesta.text())
             if x>0:
-                self.cantidadVentanas.append((i,x))
+                self.hechos[len(self.hechos)-1]=self.actualizar(self.hechos[len(self.hechos)-1],cantVent=x)
                 self.paso5(i,max)
             else:
                 QtWidgets.QMessageBox.information(self, "Mensaje", "Error: Cantidad ingresada invalida.",QtWidgets.QMessageBox.Ok)
@@ -311,11 +325,16 @@ class ssbbcc(QtWidgets.QMainWindow):
             self.interfaz.btn_opc3.clicked.disconnect()
         except TypeError: pass
         self.interfaz.lbl_pregunta.setVisible(False)
-        self.interfaz.btn_opc1.setVisible(False)
+        self.interfaz.btn_opc1.setVisible(True)
         self.interfaz.btn_opc2.setVisible(False)
         self.interfaz.btn_opc3.setVisible(False)
+        self.interfaz.chbox_opc1.setVisible(False)
+        self.interfaz.chbox_opc2.setVisible(False)
+        self.interfaz.chbox_opc3.setVisible(False)
+        self.interfaz.btn_opc1.setText("Reiniciar")
         self.interfaz.lbl_pregunta.setText("Hemos terminado.")
         self.interfaz.label_2.setText("Hemos encontrado unas recomendaciones para usted:")
+        self.interfaz.btn_opc1.clicked.connect(self.reiniciar)
         lista=[]
         for x in range(max+1):
             lista.append([])
@@ -324,72 +343,190 @@ class ssbbcc(QtWidgets.QMainWindow):
         for x in self.hechos:
             motor.declare(x)
         motor.run()
-        recomendacion="Para su hogar:<p></p>"+motor.recomendaciones[0]+"<p></p>"
+        if len(motor.productos)>0: 
+            recomendacion="Para su hogar:<p></p>"+motor.recomendaciones[0]+"<p></p>"
+        else:
+            recomendacion=""
         cont=1
         for i in motor.recomendaciones[1:]:
             recomendacion+="Para la habitación {}:<p></p>".format(cont)
             if i!=[]:
                 for j in i:
                     recomendacion+=j+"<p></p>"
-            else:
-                recomendacion+="Para la habitación {} no se ha podido hallar ninguan recomendación<p></p>".format(cont)
+            #else:
+                #recomendacion+="Para la habitación {} no se ha podido hallar ninguan recomendación<p></p>".format(cont)
             if motor.resultado[cont]["aspectos"]!=tuple():
                 for j in motor.resultado[cont]["aspectos"]:
                     recomendacion+="Para domotizar la {} no se ha podido hallar ninguan recomendación<p></p>".format(j)
             cont+=1
         self.interfaz.lbl_recomendaciones.setText(recomendacion)
-        """for x in motor.resultado[1:]:
-            10
-        print(str(self.cantidadBocas))
-        print(str(self.cantidadVentanas))
-        print(motor.resultado)
-        print("")
-        print(motor.recomendaciones)
-        print("")
-        print(motor.productos)
-        print(motor.cantidades)"""
+        if type(motor.resultado[len(motor.resultado)-1])==type(motor.resultado[0]):
+            motor.resultado.pop()
+        self.mostrarProductos(motor)
+
+    def reiniciar(self):
+        self.hechos=[]
+        self.documento = QtGui.QTextDocument()
+        self.paso1()
+        self.interfaz.lbl_pregunta.setVisible(True)
+        self.interfaz.lbl_pregunta.setText("¡Bienvenido!")
+        self.interfaz.label_2.setText("")
+        self.interfaz.lbl_recomendaciones.setPixmap(QtGui.QPixmap("Iconos/domotica_0.png.webp"))   
+        self.interfaz.table_presupuesto.setRowCount(0)
 
     def mostrarProductos(self,motor:motorInferencia):
-        n=len(motor.productos)
-        lista=[]
-        cantidades=[]
-        self.interfaz.table_presupuesto.setRowCount(n)
-        for i in motor.productos:
-            for j in motor.recomendaciones[1:]:
-                10
+        print(motor.productos)
+        if len(motor.productos)>0 and math.ceil(motor.resultado[0]["tamano"]/10)>0:
+            motor.productos.append("Amplificador de señal 230V")
+            motor.cantidades.append(math.ceil(motor.resultado[0]["tamano"]/10))
+        ambientes=motor.resultado[1:]
+        self.interfaz.table_presupuesto.setRowCount(len(motor.productos))
+        i=0;total=0
+        for x in motor.productos:
+            if x in ("Atenuador Dimmer de Encastre","Actuador Telerruptor 2CH"):
+                cont=0
+                for y in ambientes:
+                    if x in y["modulosIlu"]:
+                        cont+=y["cantBocas"]
+                motor.cantidades[i]=math.ceil(cont/5)
+            elif x in ("Actuador Shusters 2CH Blanco","Motor para cortinas"):
+                cont=0
+                for y in ambientes:
+                    if x in y["modulosIlu"] or x in y["equipoIlu"]: cont+=y["cantVent"]
+                else: motor.cantidades[i]=cont
+            precio=self.valor(x)
+            print(motor.cantidades[i])
+            print(precio)
+            self.interfaz.table_presupuesto.setItem(i,0,QtWidgets.QTableWidgetItem(x))
+            self.interfaz.table_presupuesto.setItem(i,1,QtWidgets.QTableWidgetItem(str(motor.cantidades[i])))
+            self.interfaz.table_presupuesto.setItem(i,2,QtWidgets.QTableWidgetItem(str(precio)))
+            self.interfaz.table_presupuesto.setItem(i,3,QtWidgets.QTableWidgetItem(str(motor.cantidades[i]*precio)))
+            total+=motor.cantidades[i]*precio
+            i+=1
+        self.interfaz.lbl_total.setText(str(total))
 
+    def imprimir(self):
+        x=self.interfaz.table_presupuesto
+        html=""
+        for i in range(self.interfaz.table_presupuesto.rowCount()):
+            html+= "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(x.item(i,0).text(),x.item(i,1).text(),x.item(i,2).text(),x.item(i,3).text())
+        reporteHtml = """
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+h3 {
+    font-family: Helvetica-Bold;
+    text-align: center;
+   }
+table {
+       font-family: arial, sans-serif;
+       border-collapse: collapse;
+       width: 100%;
+      }
+td {
+    text-align: left;
+    padding-top: 4px;
+    padding-right: 6px;
+    padding-bottom: 2px;
+    padding-left: 6px;
+   }
+th {
+    text-align: left;
+    padding: 4px;
+    background-color: black;
+    color: white;
+   }
+tr:nth-child(even) {
+                    background-color: #dddddd;
+                   }
+</style>
+</head>
+<body>
+<h3>Listado de Productos<br/></h3>
+<table align="left" width="100%" cellspacing="0">
+  <tr>
+    <th>Descripción</th>
+    <th>Cantidad</th>
+    <th>Precio Unidad</th>
+    <th>Subtotal</th>
+  </tr>
+  [DATOS]
+</table>
+</body>
+</html>
+""".replace("[DATOS]", html)
+        html = QtCore.QByteArray()
+        html.append(str(reporteHtml))
+        codec = QtCore.QTextCodec.codecForHtml(html)
+        unistr = codec.toUnicode(html)
+        if QtCore.Qt.mightBeRichText(unistr):
+            self.documento.setHtml(unistr)
+        else:
+            self.documento.setPlainText(unistr)
+        if not self.documento.isEmpty():
+            impresion = QtPrintSupport.QPrinter(QtPrintSupport.QPrinter.HighResolution)
+            vista = QtPrintSupport.QPrintPreviewDialog(impresion, self)
+            vista.setWindowTitle("Vista previa")
+            vista.setWindowFlags(QtCore.Qt.Window)
+            vista.resize(800, 600)
+            exportarPDF = vista.findChildren(QtWidgets.QToolBar)
+            exportarPDF[0].addAction(QtGui.QIcon("Iconos/exportarPDF.png"), "Exportar a PDF", lambda: self.exportarPDF(vista))
+            vista.paintRequested.connect(lambda: self.vistaPreviaImpresion(impresion))
+            vista.exec_()
+        else:
+            QtWidgets.QMessageBox.critical(self,"Vista previa","No hay datos para visualizar.",QtWidgets.QMessageBox.Ok)
+    
+    def vistaPreviaImpresion(self, impresion):
+        self.documento.print_(impresion)
 
-            ",,"
+    def exportarPDF(self,vista):
+        if not self.documento.isEmpty():
+            nombreArchivo, _ = QtWidgets.QFileDialog().getSaveFileName(self, "Exportar a PDF", "Documentos/Listado de Productos","Archivos PDF (*.pdf);;All Files (*)",options=QtWidgets.QFileDialog.Options())
+            if nombreArchivo:
+                impresion = QtPrintSupport.QPrinter(QtPrintSupport.QPrinter.HighResolution)
+                impresion.setOutputFormat(QtPrintSupport.QPrinter.PdfFormat)
+                impresion.setOutputFileName(nombreArchivo)
+                self.documento.print_(impresion)
+                QtWidgets.QMessageBox.information(self, "Exportar a PDF", "Datos exportados con éxito.",QtWidgets.QMessageBox.Ok)
+                vista.close()
+        else:
+            QtWidgets.QMessageBox.critical(self, "Exportar a PDF", "No hay datos para exportar.",QtWidgets.QMessageBox.Ok)
 
+    #Falta tamaño de casa/10 para repetidores
     def valor(self,cadena):
         if cadena=="Atenuador Dimmer de Encastre":
-            return 220
-        if cadena=="Actuador Telerruptor 2CH":
-            return 200
+            return 93074
+        elif cadena=="Actuador Telerruptor 2CH":
+            return 80660
         elif cadena=="Actuador Shusters 2CH Blanco":
-            return 200
+            return 32023
         if cadena=="Focos inteligentes":
-            return 200 #MAL
+            return 2658.06
         elif cadena=="Enchufe":
-            return 200 #MAL
+            return 3321.28
         elif cadena=="Sensor de Movimiento":
-            return 4569
+            return 7038
         elif cadena=="Sensor Crepuscular":
-            return 4569 #MAL
+            return 3173
         elif cadena=="Motor para cortinas":
-            return 4569 #MAL
+            return 18507
         elif cadena=="Termostato Bliss":
-            return 190
+            return 15550
         elif cadena=="Cronotermostato Bliss":
-            return 210
+            return 36822.24
         elif cadena=="Sensores de presencia":
-            return 210 #MAL
+            return 30328
         elif cadena=="Sensores de seguridad":
-            return 210 #MAL
+            return 46899
         elif cadena=="Cerradura Biométrica":
-            return 56512
+            return 18999
         elif cadena=="Alarma magnética de apertura":
+            return 3700
+        elif cadena=="Amplificador de señal 230V":
             return 3000
+        return 0
 
 
 

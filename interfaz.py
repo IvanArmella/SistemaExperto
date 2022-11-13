@@ -181,40 +181,6 @@ class Ui_interfaz(object):
         self.horizontalLayout_3.setContentsMargins(100, -1, 100, -1)
         self.horizontalLayout_3.setSpacing(50)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.btn_opc4 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_opc4.setMinimumSize(QtCore.QSize(100, 28))
-        self.btn_opc4.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btn_opc4.setStyleSheet("QPushButton{\n"
-"    border:1px solid;\n"
-"    border-radius:12px;\n"
-"    background-color:#c6e2e9;\n"
-"}\n"
-"QPushButton:hover{\n"
-"    font-weight: bold;\n"
-"}\n"
-"QPushButton:pressed{\n"
-"    background-color:#a7bed3;\n"
-"    border:2px solid;\n"
-"}")
-        self.btn_opc4.setObjectName("btn_opc4")
-        self.horizontalLayout_3.addWidget(self.btn_opc4)
-        self.btn_opc5 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_opc5.setMinimumSize(QtCore.QSize(100, 28))
-        self.btn_opc5.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btn_opc5.setStyleSheet("QPushButton{\n"
-"    border:1px solid;\n"
-"    border-radius:12px;\n"
-"    background-color:#c6e2e9;\n"
-"}\n"
-"QPushButton:hover{\n"
-"    font-weight: bold;\n"
-"}\n"
-"QPushButton:pressed{\n"
-"    background-color:#a7bed3;\n"
-"    border:2px solid;\n"
-"}")
-        self.btn_opc5.setObjectName("btn_opc5")
-        self.horizontalLayout_3.addWidget(self.btn_opc5)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
@@ -267,10 +233,9 @@ class Ui_interfaz(object):
         self.table_presupuesto.setTabKeyNavigation(True)
         self.table_presupuesto.setAlternatingRowColors(False)
         self.table_presupuesto.setObjectName("table_presupuesto")
-        self.table_presupuesto.setColumnCount(5)
+        self.table_presupuesto.setColumnCount(4)
         self.table_presupuesto.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
-        item.setBackground(QtGui.QColor(255, 255, 255))
         self.table_presupuesto.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.table_presupuesto.setHorizontalHeaderItem(1, item)
@@ -278,8 +243,6 @@ class Ui_interfaz(object):
         self.table_presupuesto.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
         self.table_presupuesto.setHorizontalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.table_presupuesto.setHorizontalHeaderItem(4, item)
         self.verticalLayout_2.addWidget(self.table_presupuesto)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
@@ -379,20 +342,16 @@ class Ui_interfaz(object):
         self.btn_opc1.setText(_translate("interfaz", "Opción 1"))
         self.btn_opc2.setText(_translate("interfaz", "Opción 2"))
         self.btn_opc3.setText(_translate("interfaz", "Opción 3"))
-        self.btn_opc4.setText(_translate("interfaz", "Opción 4"))
-        self.btn_opc5.setText(_translate("interfaz", "Opción 5"))
         self.label_2.setText(_translate("interfaz", "Hemos encontrado unas recomendaciones para usted"))
         self.label_4.setText(_translate("interfaz", "PRESUPUESTO"))
         self.table_presupuesto.setSortingEnabled(True)
         item = self.table_presupuesto.horizontalHeaderItem(0)
-        item.setText(_translate("interfaz", "Imagen"))
-        item = self.table_presupuesto.horizontalHeaderItem(1)
         item.setText(_translate("interfaz", "Descripción"))
-        item = self.table_presupuesto.horizontalHeaderItem(2)
+        item = self.table_presupuesto.horizontalHeaderItem(1)
         item.setText(_translate("interfaz", "Cantidad"))
-        item = self.table_presupuesto.horizontalHeaderItem(3)
+        item = self.table_presupuesto.horizontalHeaderItem(2)
         item.setText(_translate("interfaz", "Precio Unidad"))
-        item = self.table_presupuesto.horizontalHeaderItem(4)
+        item = self.table_presupuesto.horizontalHeaderItem(3)
         item.setText(_translate("interfaz", "Subtotal"))
         self.lbl_txt_total.setText(_translate("interfaz", "TOTAL: $"))
         self.lbl_total.setText(_translate("interfaz", "750"))

@@ -39,6 +39,8 @@ class Ambiente(Fact):
     modulosIlu=Field(tuple,default=tuple())
     equipoIlu=Field(tuple,default=tuple())
     artefactoIlu=Field(tuple,default=tuple())
+    cantBocas=Field(int,default=0)
+    cantVent=Field(int,default=0)
   
 
 class Recomendacion(Fact):
@@ -400,8 +402,6 @@ class motorInferencia(KnowledgeEngine):
     @Rule(Cliente(presupuesto='Bajo'),AS.casa<<Casa(bandera1=True))
     def r1(self,casa):
         self.resultado.append(self.actualizar(casa,accesoRemoto=False,usarSensores=False,bandera1=False))
-        print("Regla1")
-        print(self.facts)
 
     def actualizar(self, declared_fact, **modifiers):
         self.retract(declared_fact)
