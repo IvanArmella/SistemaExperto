@@ -76,15 +76,15 @@ class motorInferencia(KnowledgeEngine):
 
     ####################Tabla10###################
     @Rule(Ambiente(id=MATCH.id,artefactoSeg=("Cerradura Biométrica","Alarma magnética de apertura",)))
-    def r44(self):
+    def r44(self,id):
         self.recomendaciones[id].append(recomendaciones[16])
 
-    @Rule(Ambiente(artefactoSeg=("Sensores de seguridad",)))
-    def r43(self):
+    @Rule(Ambiente(id=MATCH.id,artefactoSeg=("Sensores de seguridad",)))
+    def r43(self,id):
         self.recomendaciones[id].append(recomendaciones[15])
 
-    @Rule(Ambiente(equipoSeg=("Sensores de presencia",)))
-    def r42(self):
+    @Rule(Ambiente(id=MATCH.id,equipoSeg=("Sensores de presencia",)))
+    def r42(self,id):
         self.recomendaciones[id].append(recomendaciones[14])
 
 

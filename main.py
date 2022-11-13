@@ -327,6 +327,7 @@ class ssbbcc(QtWidgets.QMainWindow):
             self.interfaz.btn_opc3.clicked.disconnect()
         except TypeError: pass
         self.interfaz.lbl_pregunta.setVisible(False)
+        self.interfaz.edt_respuesta.setVisible(False)
         self.interfaz.btn_opc1.setVisible(True)
         self.interfaz.btn_opc2.setVisible(False)
         self.interfaz.btn_opc3.setVisible(False)
@@ -334,7 +335,6 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.interfaz.chbox_opc2.setVisible(False)
         self.interfaz.chbox_opc3.setVisible(False)
         self.interfaz.btn_opc1.setText("Reiniciar")
-        self.interfaz.lbl_pregunta.setText("Hemos terminado.")
         self.interfaz.label_2.setText("Hemos encontrado unas recomendaciones para usted:")
         self.interfaz.btn_opc1.clicked.connect(self.reiniciar)
         lista=[]
@@ -378,7 +378,6 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.interfaz.table_presupuesto.setRowCount(0)
 
     def mostrarProductos(self,motor:motorInferencia):
-        print(motor.productos)
         if len(motor.productos)>0 and math.ceil(motor.resultado[0]["tamano"]/10)>0:
             motor.productos.append("Amplificador de señal 230V")
             motor.cantidades.append(math.ceil(motor.resultado[0]["tamano"]/10))
@@ -398,22 +397,27 @@ class ssbbcc(QtWidgets.QMainWindow):
                     if x in y["modulosIlu"] or x in y["equipoIlu"]: cont+=y["cantVent"]
                 else: motor.cantidades[i]=cont
             precio=self.valor(x)
-            print(motor.cantidades[i])
-            print(precio)
-            self.interfaz.table_presupuesto.setItem(i,0,QtWidgets.QTableWidgetItem(x))
-            self.interfaz.table_presupuesto.setItem(i,1,QtWidgets.QTableWidgetItem(str(motor.cantidades[i])))
-            self.interfaz.table_presupuesto.setItem(i,2,QtWidgets.QTableWidgetItem(str(precio)))
-            self.interfaz.table_presupuesto.setItem(i,3,QtWidgets.QTableWidgetItem(str(motor.cantidades[i]*precio)))
+            self.interfaz.table_presupuesto.setItem(i,1,QtWidgets.QTableWidgetItem(x))
+            self.interfaz.table_presupuesto.setItem(i,2,QtWidgets.QTableWidgetItem(str(motor.cantidades[i])))
+            self.interfaz.table_presupuesto.setItem(i,3,QtWidgets.QTableWidgetItem(str(precio)))
+            self.interfaz.table_presupuesto.setItem(i,4,QtWidgets.QTableWidgetItem(str(motor.cantidades[i]*precio)))
+            label=QtWidgets.QLabel()
+            label.setMaximumWidth(100)
+            label.setMaximumHeight(100)
+            label.setStyleSheet("background-color:#ffffff")
+            label.setPixmap(QtGui.QPixmap("Iconos/"+x+".webp").scaled(100,100))
+            self.interfaz.table_presupuesto.setCellWidget(i,0,label)
             total+=motor.cantidades[i]*precio
             i+=1
         self.interfaz.lbl_total.setText(str(total))
         self.interfaz.table_presupuesto.resizeColumnsToContents()
+        self.interfaz.table_presupuesto.resizeRowsToContents()
 
     def imprimir(self):
         x=self.interfaz.table_presupuesto
         html=""
         for i in range(self.interfaz.table_presupuesto.rowCount()):
-            html+= "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(x.item(i,0).text(),x.item(i,1).text(),x.item(i,2).text(),x.item(i,3).text())
+            html+= "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(x.item(i,1).text(),x.item(i,2).text(),x.item(i,3).text(),x.item(i,4).text())
         reporteHtml = """
 <!DOCTYPE html>
 <html>
