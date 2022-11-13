@@ -14,6 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_interfaz(object):
     def setupUi(self, interfaz):
         interfaz.setObjectName("interfaz")
+        interfaz.setWindowModality(QtCore.Qt.ApplicationModal)
         interfaz.resize(1187, 935)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("Iconos/domotica_0.png.webp"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -109,15 +110,59 @@ class Ui_interfaz(object):
         self.edt_respuesta.setObjectName("edt_respuesta")
         self.horizontalLayout_4.addWidget(self.edt_respuesta)
         self.chbox_opc1 = QtWidgets.QCheckBox(self.centralwidget)
-        self.chbox_opc1.setStyleSheet("\n"
-"\n"
-"")
+        self.chbox_opc1.setMinimumSize(QtCore.QSize(30, 0))
+        self.chbox_opc1.setStyleSheet("QCheckBox{\n"
+"    boder: 2px solid rgb(0,0,0);\n"
+"    padding: 5px;\n"
+"}\n"
+"QCheckBox::indicator\n"
+"{\n"
+"    width:15px;\n"
+"    height:15px;\n"
+"    border: 2px solid rgb(0,0,0);\n"
+"    border-radius:5px;\n"
+"    background-color:rgb(255,255,255)\n"
+"}\n"
+"QCheckBox::indicator:checked{\n"
+"    background-color:#04e762;\n"
+"}")
+        self.chbox_opc1.setChecked(False)
         self.chbox_opc1.setObjectName("chbox_opc1")
         self.horizontalLayout_4.addWidget(self.chbox_opc1)
         self.chbox_opc2 = QtWidgets.QCheckBox(self.centralwidget)
+        self.chbox_opc2.setStyleSheet("QCheckBox{\n"
+"    boder: 2px solid rgb(0,0,0);\n"
+"    padding: 5px;\n"
+"}\n"
+"QCheckBox::indicator\n"
+"{\n"
+"    width:15px;\n"
+"    height:15px;\n"
+"    border: 2px solid rgb(0,0,0);\n"
+"    border-radius:5px;\n"
+"    background-color:rgb(255,255,255)\n"
+"}\n"
+"QCheckBox::indicator:checked{\n"
+"    background-color:#04e762;\n"
+"}")
         self.chbox_opc2.setObjectName("chbox_opc2")
         self.horizontalLayout_4.addWidget(self.chbox_opc2)
         self.chbox_opc3 = QtWidgets.QCheckBox(self.centralwidget)
+        self.chbox_opc3.setStyleSheet("QCheckBox{\n"
+"    boder: 2px solid rgb(0,0,0);\n"
+"    padding: 5px;\n"
+"}\n"
+"QCheckBox::indicator\n"
+"{\n"
+"    width:15px;\n"
+"    height:15px;\n"
+"    border: 2px solid rgb(0,0,0);\n"
+"    border-radius:5px;\n"
+"    background-color:rgb(255,255,255)\n"
+"}\n"
+"QCheckBox::indicator:checked{\n"
+"    background-color:#04e762;\n"
+"}")
         self.chbox_opc3.setObjectName("chbox_opc3")
         self.horizontalLayout_4.addWidget(self.chbox_opc3)
         self.verticalLayout.addLayout(self.horizontalLayout_4)
@@ -177,11 +222,6 @@ class Ui_interfaz(object):
         self.btn_opc3.setObjectName("btn_opc3")
         self.horizontalLayout_2.addWidget(self.btn_opc3)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setContentsMargins(100, -1, 100, -1)
-        self.horizontalLayout_3.setSpacing(50)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(13)
@@ -207,7 +247,7 @@ class Ui_interfaz(object):
         self.lbl_recomendaciones.setWordWrap(True)
         self.lbl_recomendaciones.setObjectName("lbl_recomendaciones")
         self.verticalLayout.addWidget(self.lbl_recomendaciones)
-        self.verticalLayout.setStretch(5, 2)
+        self.verticalLayout.setStretch(4, 2)
         self.horizontalLayout_8.addLayout(self.verticalLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setContentsMargins(-1, -1, 25, -1)
@@ -233,9 +273,10 @@ class Ui_interfaz(object):
         self.table_presupuesto.setTabKeyNavigation(True)
         self.table_presupuesto.setAlternatingRowColors(False)
         self.table_presupuesto.setObjectName("table_presupuesto")
-        self.table_presupuesto.setColumnCount(4)
+        self.table_presupuesto.setColumnCount(5)
         self.table_presupuesto.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
+        item.setBackground(QtGui.QColor(255, 255, 255))
         self.table_presupuesto.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.table_presupuesto.setHorizontalHeaderItem(1, item)
@@ -243,6 +284,8 @@ class Ui_interfaz(object):
         self.table_presupuesto.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
         self.table_presupuesto.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.table_presupuesto.setHorizontalHeaderItem(4, item)
         self.verticalLayout_2.addWidget(self.table_presupuesto)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
@@ -336,9 +379,9 @@ class Ui_interfaz(object):
         self.label_5.setText(_translate("interfaz", "<html><head/><body><p><span style=\" color:#000000;\">Sistema de Asesoramiento para la Monitorización y</span></p><p><span style=\" color:#000000;\">Control Inteligente del Hogar</span></p></body></html>"))
         self.lbl_pregunta.setText(_translate("interfaz", "¡Bienvenido!"))
         self.label_6.setText(_translate("interfaz", "Respuesta: "))
-        self.chbox_opc1.setText(_translate("interfaz", "CheckBox"))
-        self.chbox_opc2.setText(_translate("interfaz", "CheckBox"))
-        self.chbox_opc3.setText(_translate("interfaz", "CheckBox"))
+        self.chbox_opc1.setText(_translate("interfaz", "opc1"))
+        self.chbox_opc2.setText(_translate("interfaz", "opc2"))
+        self.chbox_opc3.setText(_translate("interfaz", "opc3"))
         self.btn_opc1.setText(_translate("interfaz", "Opción 1"))
         self.btn_opc2.setText(_translate("interfaz", "Opción 2"))
         self.btn_opc3.setText(_translate("interfaz", "Opción 3"))
@@ -346,12 +389,14 @@ class Ui_interfaz(object):
         self.label_4.setText(_translate("interfaz", "PRESUPUESTO"))
         self.table_presupuesto.setSortingEnabled(True)
         item = self.table_presupuesto.horizontalHeaderItem(0)
-        item.setText(_translate("interfaz", "Descripción"))
+        item.setText(_translate("interfaz", "Imagen"))
         item = self.table_presupuesto.horizontalHeaderItem(1)
-        item.setText(_translate("interfaz", "Cantidad"))
+        item.setText(_translate("interfaz", "Descripción"))
         item = self.table_presupuesto.horizontalHeaderItem(2)
-        item.setText(_translate("interfaz", "Precio Unidad"))
+        item.setText(_translate("interfaz", "Cantidad"))
         item = self.table_presupuesto.horizontalHeaderItem(3)
+        item.setText(_translate("interfaz", "Precio Unidad"))
+        item = self.table_presupuesto.horizontalHeaderItem(4)
         item.setText(_translate("interfaz", "Subtotal"))
         self.lbl_txt_total.setText(_translate("interfaz", "TOTAL: $"))
         self.lbl_total.setText(_translate("interfaz", "750"))

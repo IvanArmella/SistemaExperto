@@ -14,6 +14,7 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.documento = QtGui.QTextDocument()
         self.interfaz=Ui_interfaz()
         self.interfaz.setupUi(self)
+        self.interfaz.lbl_total.setText("0")
         self.paso1() 
         self.interfaz.btn_salir.clicked.connect(self.close)
         self.interfaz.btn_imprimir.clicked.connect(self.imprimir)
@@ -46,6 +47,7 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.interfaz.btn_opc1.setText("Poco")
         self.interfaz.btn_opc2.setText("Normal")
         self.interfaz.btn_opc3.setText("Mucho")
+
         self.interfaz.btn_opc1.setVisible(True)
         self.interfaz.btn_opc2.setVisible(True)
         self.interfaz.btn_opc3.setVisible(True)
@@ -369,6 +371,7 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.documento = QtGui.QTextDocument()
         self.paso1()
         self.interfaz.lbl_pregunta.setVisible(True)
+        self.interfaz.lbl_total.setText("0")
         self.interfaz.lbl_pregunta.setText("¡Bienvenido!")
         self.interfaz.label_2.setText("")
         self.interfaz.lbl_recomendaciones.setPixmap(QtGui.QPixmap("Iconos/domotica_0.png.webp"))   
@@ -404,6 +407,7 @@ class ssbbcc(QtWidgets.QMainWindow):
             total+=motor.cantidades[i]*precio
             i+=1
         self.interfaz.lbl_total.setText(str(total))
+        self.interfaz.table_presupuesto.resizeColumnsToContents()
 
     def imprimir(self):
         x=self.interfaz.table_presupuesto
