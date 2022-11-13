@@ -39,7 +39,7 @@ class MotorInferencia(KnowledgeEngine):
         super(MotorInferencia, self).__init__()
         self.resultado=[""]
 
-    ####################Tabla5###################
+    ####################Tabla6###################
 
     @Rule(AS.ambiente<<Ambiente(id=MATCH.id,aspectos=MATCH.p & P(lambda p: "Iluminacion" in p),usarED=False,usarAI=True))
     def r25(self,ambiente,p,id):
@@ -375,7 +375,6 @@ class MotorInferencia(KnowledgeEngine):
                 print("Ingrese una opción valida.")
             if x==1: return "Fija"
             else: return "Atenuada"
-
 
     def ingresarVentanas(self,i):
         i=str(i)
