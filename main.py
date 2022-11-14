@@ -18,6 +18,7 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.paso1() 
         self.interfaz.btn_salir.clicked.connect(self.close)
         self.interfaz.btn_imprimir.clicked.connect(self.imprimir)
+        self.interfaz.label_2.setVisible(False)
         self.show()
 
     def actualizar(self, declared_fact, **modifiers):
@@ -43,7 +44,7 @@ class ssbbcc(QtWidgets.QMainWindow):
         try:
             self.interfaz.btn_opc3.clicked.disconnect()
         except TypeError: pass
-        self.interfaz.lbl_pregunta.setText("¿Qué tanto quiere gastar para domotizar?")
+        self.interfaz.lbl_pregunta.setText("¿Qué tanto quiere gastar para domotizar considerando que el costo promedio por 1m² es 88632 pesos?")
         self.interfaz.btn_opc1.setText("Poco")
         self.interfaz.btn_opc2.setText("Normal")
         self.interfaz.btn_opc3.setText("Mucho")
@@ -332,7 +333,9 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.interfaz.chbox_opc1.setVisible(False)
         self.interfaz.chbox_opc2.setVisible(False)
         self.interfaz.chbox_opc3.setVisible(False)
+        self.interfaz.label_6.setVisible(False)
         self.interfaz.btn_opc1.setText("Reiniciar")
+        self.interfaz.label_2.setVisible(True)
         self.interfaz.label_2.setText("Hemos encontrado unas recomendaciones para usted:")
         self.interfaz.btn_opc1.clicked.connect(self.reiniciar)
         lista=[]
@@ -349,13 +352,15 @@ class ssbbcc(QtWidgets.QMainWindow):
             recomendacion=""
         cont=1
         for i in motor.recomendaciones[1:]:
+            band=True
             recomendacion+="Para la habitación {}:<p></p>".format(cont)
             if i!=[]:
                 for j in i:
                     recomendacion+=j+"<p></p>"
             else:
                 recomendacion+="No se ha podido hallar ninguna recomendación<p></p>".format(cont)
-            if motor.resultado[cont]["aspectos"]!=tuple():
+                band=False
+            if band and motor.resultado[cont]["aspectos"]!=tuple():
                 for j in motor.resultado[cont]["aspectos"]:
                     recomendacion+="Para domotizar la {} no se ha podido hallar ninguan recomendación<p></p>".format(j)
             cont+=1
@@ -370,9 +375,10 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.hechos=[]
         self.documento = QtGui.QTextDocument()
         self.paso1()
+        self.interfaz.label_6.setVisible(True)
         self.interfaz.lbl_pregunta.setVisible(True)
         self.interfaz.lbl_total.setText("0")
-        self.interfaz.lbl_pregunta.setText("¡Bienvenido!")
+        self.interfaz.lbl_pregunta.setText("¿Qué tanto quiere gastar para domotizar?")
         self.interfaz.label_2.setText("")
         self.interfaz.lbl_recomendaciones.setPixmap(QtGui.QPixmap("Iconos/domotica_0.png.webp"))   
         self.interfaz.table_presupuesto.setRowCount(0)
@@ -381,7 +387,7 @@ class ssbbcc(QtWidgets.QMainWindow):
         if len(motor.productos)>0 and math.ceil(motor.resultado[0]["tamano"]/10)>0:
             motor.productos.append("Amplificador de señal 230V")
             motor.cantidades.append(math.ceil(motor.resultado[0]["tamano"]/10))
-        ambientes=motor.resultado[1:]
+        #ambientes=motor.resultado[1:]
         self.interfaz.table_presupuesto.setRowCount(len(motor.productos))
         i=0;total=0
         for x in motor.productos:
