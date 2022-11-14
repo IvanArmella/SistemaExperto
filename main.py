@@ -47,7 +47,6 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.interfaz.btn_opc1.setText("Poco")
         self.interfaz.btn_opc2.setText("Normal")
         self.interfaz.btn_opc3.setText("Mucho")
-
         self.interfaz.btn_opc1.setVisible(True)
         self.interfaz.btn_opc2.setVisible(True)
         self.interfaz.btn_opc3.setVisible(True)
@@ -69,7 +68,6 @@ class ssbbcc(QtWidgets.QMainWindow):
             self.hechos.append(Cliente(presupuesto="Alto"))
         self.paso2()
             
-
     def paso2(self):
         self.interfaz.btn_opc1.clicked.disconnect()
         self.interfaz.btn_opc1.setText("Ingresar")
@@ -355,13 +353,15 @@ class ssbbcc(QtWidgets.QMainWindow):
             if i!=[]:
                 for j in i:
                     recomendacion+=j+"<p></p>"
-            #else:
-                #recomendacion+="Para la habitación {} no se ha podido hallar ninguan recomendación<p></p>".format(cont)
+            else:
+                recomendacion+="No se ha podido hallar ninguna recomendación<p></p>".format(cont)
             if motor.resultado[cont]["aspectos"]!=tuple():
                 for j in motor.resultado[cont]["aspectos"]:
                     recomendacion+="Para domotizar la {} no se ha podido hallar ninguan recomendación<p></p>".format(j)
             cont+=1
         self.interfaz.lbl_recomendaciones.setText(recomendacion)
+        print(motor.resultado)
+        print(motor.recomendaciones)
         if type(motor.resultado[len(motor.resultado)-1])==type(motor.resultado[0]):
             motor.resultado.pop()
         self.mostrarProductos(motor)
@@ -385,17 +385,17 @@ class ssbbcc(QtWidgets.QMainWindow):
         self.interfaz.table_presupuesto.setRowCount(len(motor.productos))
         i=0;total=0
         for x in motor.productos:
-            if x in ("Atenuador Dimmer de Encastre","Actuador Telerruptor 2CH"):
+            """if x in ("Atenuador Dimmer de Encastre","Actuador Telerruptor 2CH","Focos inteligentes"):
                 cont=0
                 for y in ambientes:
-                    if x in y["modulosIlu"]:
+                    if x in y["modulosIlu"] or x in y["artefactoIlu"]:
                         cont+=y["cantBocas"]
                 motor.cantidades[i]=math.ceil(cont/5)
             elif x in ("Actuador Shusters 2CH Blanco","Motor para cortinas"):
                 cont=0
                 for y in ambientes:
                     if x in y["modulosIlu"] or x in y["equipoIlu"]: cont+=y["cantVent"]
-                else: motor.cantidades[i]=cont
+                else: motor.cantidades[i]=cont"""
             precio=self.valor(x)
             self.interfaz.table_presupuesto.setItem(i,1,QtWidgets.QTableWidgetItem(x))
             self.interfaz.table_presupuesto.setItem(i,2,QtWidgets.QTableWidgetItem(str(motor.cantidades[i])))
@@ -512,7 +512,7 @@ tr:nth-child(even) {
             return 32023
         if cadena=="Focos inteligentes":
             return 2658.06
-        elif cadena=="Enchufe":
+        elif cadena=="Enchufe inteligente":
             return 3321.28
         elif cadena=="Sensor de Movimiento":
             return 7038
@@ -533,7 +533,7 @@ tr:nth-child(even) {
         elif cadena=="Alarma magnética de apertura":
             return 3700
         elif cadena=="Amplificador de señal 230V":
-            return 3000
+            return 7000
         return 0
 
 

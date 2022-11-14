@@ -4,8 +4,6 @@ from pyknow import *
 from pyknow.fact import *
 import math
 
-
-
 class Cliente(Fact):
     presupuesto=Field(str,default="Bajo")
 
@@ -20,10 +18,6 @@ class Casa(Fact):
     red=Field(str,default="")
     repetidores=Field(str,default="")
     usarSensores=Field(bool,default=False)
-
-class RedInalambrica(Fact):
-    tipoRedInalambrica=Field(str,default="Bluetooth")
-    repetidores=Field(str,default=0)
 
 class Ambiente(Fact):
     usarED=Field(bool,default=True)
@@ -75,7 +69,7 @@ class motorInferencia(KnowledgeEngine):
         self.cantidades=[]
 
     ####################Tabla10###################
-    @Rule(Ambiente(id=MATCH.id,artefactoSeg=("Cerradura Biométrica","Alarma magnética de apertura",)))
+    @Rule(Ambiente(id=MATCH.id,artefactoSeg=("Cerradura Biométrica","Alarma magnética de apertura")))
     def r44(self,id):
         self.recomendaciones[id].append(recomendaciones[16])
 
@@ -99,7 +93,7 @@ class motorInferencia(KnowledgeEngine):
 
 
     ####################Tabla8###################
-    @Rule(Ambiente(id=MATCH.id,artefactoIlu=("Focos inteligentes","Enchufe")))
+    @Rule(Ambiente(id=MATCH.id,artefactoIlu=("Focos inteligentes","Enchufe inteligente")))
     def r39(self,id):
         self.recomendaciones[id].append(recomendaciones[11])
     
@@ -171,6 +165,19 @@ class motorInferencia(KnowledgeEngine):
         p=list(p); 
         p.remove("Iluminacion")
         self.resultado[id]=self.actualizar(ambiente,artefactoIlu=("Focos inteligentes","Enchufe inteligente"),aspectos=tuple(p))        
+        for x in ("Enchufe inteligente",):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(1)
+            else:
+                self.cantidades[self.productos.index(x)]+=1
+
+        for x in ("Focos inteligentes",):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(math.ceil(ambiente["cantBocas"]/5))
+            else:
+                self.cantidades[self.productos.index(x)]+=math.ceil(ambiente["cantBocas"]/5)
         
 
     @Rule(AS.ambiente<<Ambiente(id=MATCH.id,aspectos=MATCH.p & P(lambda p: "Iluminacion" in p),usarED=True,usarAI=False,iluminacion="Fija",ventanas=False
@@ -179,11 +186,12 @@ class motorInferencia(KnowledgeEngine):
         p=list(p); 
         p.remove("Iluminacion")
         self.resultado[id]=self.actualizar(ambiente,modulosIlu=("Actuador Telerruptor 2CH",),aspectos=tuple(p))
-        if "Actuador Telerruptor 2CH" not in self.productos:
-            self.productos.append("Actuador Telerruptor 2CH")
-            self.cantidades.append(1)
-        else:
-            self.cantidades[self.productos.index("Actuador Telerruptor 2CH")]+=1
+        for x in ("Actuador Telerruptor 2CH",):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(math.ceil(ambiente["cantBocas"]/5))
+            else:
+                self.cantidades[self.productos.index(x)]+=math.ceil(ambiente["cantBocas"]/5)
 
     @Rule(AS.ambiente<<Ambiente(id=MATCH.id,aspectos=MATCH.p & P(lambda p: "Iluminacion" in p),usarED=True,usarAI=False,iluminacion="Atenuada",ventanas=False
                              ,bocasCerca=False),Casa(usarSensores=False))
@@ -191,11 +199,12 @@ class motorInferencia(KnowledgeEngine):
         p=list(p); 
         p.remove("Iluminacion")
         self.resultado[id]=self.actualizar(ambiente,modulosIlu=("Atenuador Dimmer de Encastre",),aspectos=tuple(p))
-        if "Atenuador Dimmer de Encastre" not in self.productos:
-            self.productos.append("Atenuador Dimmer de Encastre")
-            self.cantidades.append(1)
-        else:
-            self.cantidades[self.productos.index("Atenuador Dimmer de Encastre")]+=1
+        for x in ("Atenuador Dimmer de Encastre",):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(math.ceil(ambiente["cantBocas"]/5))
+            else:
+                self.cantidades[self.productos.index(x)]+=math.ceil(ambiente["cantBocas"]/5)
 
     @Rule(AS.ambiente<<Ambiente(id=MATCH.id,aspectos=MATCH.p & P(lambda p: "Iluminacion" in p),usarED=True,usarAI=False,iluminacion="Fija",ventanas=True
                              ,bocasCerca=True),Casa(usarSensores=False))
@@ -204,13 +213,18 @@ class motorInferencia(KnowledgeEngine):
         p.remove("Iluminacion")
         self.resultado[id]=self.actualizar(ambiente,modulosIlu=("Actuador Telerruptor 2CH","Actuador Shusters 2CH Blanco")
                     ,equipoIlu=("Motor para cortinas",),aspectos=tuple(p))
-        for x in ("Actuador Telerruptor 2CH","Actuador Shusters 2CH Blanco","Motor para cortinas"):
+        for x in ("Actuador Telerruptor 2CH",):
             if x not in self.productos:
                 self.productos.append(x)
-                self.cantidades.append(1)
+                self.cantidades.append(math.ceil(ambiente["cantBocas"]/5))
             else:
-                self.cantidades[self.productos.index(x)]+=1
-
+                self.cantidades[self.productos.index(x)]+=math.ceil(ambiente["cantBocas"]/5)
+        for x in ("Actuador Shusters 2CH Blanco","Motor para cortinas"):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(ambiente["cantVent"])
+            else:
+                self.cantidades[self.productos.index(x)]+=ambiente["cantVent"]
 
     @Rule(AS.ambiente<<Ambiente(id=MATCH.id,aspectos=MATCH.p & P(lambda p: "Iluminacion" in p),usarED=True,usarAI=False,iluminacion="Atenuada",ventanas=True
                              ,bocasCerca=True),Casa(usarSensores=False))
@@ -219,13 +233,18 @@ class motorInferencia(KnowledgeEngine):
         p.remove("Iluminacion")
         self.resultado[id]=self.actualizar(ambiente,modulosIlu=("Atenuador Dimmer de Encastre","Actuador Shusters 2CH Blanco")
                     ,equipoIlu=("Motor para cortinas",),aspectos=tuple(p))
-        for x in ("Atenuador Dimmer de Encastre","Actuador Shusters 2CH Blanco","Motor para cortinas"):
+        for x in ("Atenuador Dimmer de Encastre",):
             if x not in self.productos:
                 self.productos.append(x)
-                self.cantidades.append(1)
+                self.cantidades.append(math.ceil(ambiente["cantBocas"]/5))
             else:
-                self.cantidades[self.productos.index(x)]+=1
-
+                self.cantidades[self.productos.index(x)]+=math.ceil(ambiente["cantBocas"]/5)
+        for x in ("Actuador Shusters 2CH Blanco","Motor para cortinas"):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(ambiente["cantVent"])
+            else:
+                self.cantidades[self.productos.index(x)]+=ambiente["cantVent"]
 
     @Rule(AS.ambiente<<Ambiente(id=MATCH.id,aspectos=MATCH.p & P(lambda p: "Iluminacion" in p),usarED=True,usarAI=False,iluminacion="Fija",ventanas=False
                              ,bocasCerca=False),Casa(usarSensores=True))
@@ -233,12 +252,18 @@ class motorInferencia(KnowledgeEngine):
         p=list(p); 
         p.remove("Iluminacion")
         self.resultado[id]=self.actualizar(ambiente,modulosIlu=("Módulos es Actuador Telerruptor 2CH",),equipoIlu=("Sensor de Movimiento","Sensor Crepuscular"),aspectos=tuple(p))
-        for x in ("Módulos es Actuador Telerruptor 2CH","Sensor de Movimiento","Sensor Crepuscular"):
+        for x in ("Sensor de Movimiento","Sensor Crepuscular"):
             if x not in self.productos:
                 self.productos.append(x)
                 self.cantidades.append(1)
             else:
                 self.cantidades[self.productos.index(x)]+=1
+        for x in ("Actuador Telerruptor 2CH",):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(math.ceil(ambiente["cantBocas"]/5))
+            else:
+                self.cantidades[self.productos.index(x)]+=math.ceil(ambiente["cantBocas"]/5)
 
 
     @Rule(AS.ambiente<<Ambiente(id=MATCH.id,aspectos=MATCH.p & P(lambda p: "Iluminacion" in p),usarED=True,usarAI=False,iluminacion="Atenuada",ventanas=False
@@ -247,12 +272,18 @@ class motorInferencia(KnowledgeEngine):
         p=list(p); 
         p.remove("Iluminacion")
         self.resultado[id]=self.actualizar(ambiente,modulosIlu=("Atenuador Dimmer de Encastre",),equipoIlu=("Sensor de Movimiento","Sensor Crepuscular"),aspectos=tuple(p))       
-        for x in ("Atenuador Dimmer de Encastre","Sensor de Movimiento","Sensor Crepuscular"):
+        for x in ("Sensor de Movimiento","Sensor Crepuscular"):
             if x not in self.productos:
                 self.productos.append(x)
                 self.cantidades.append(1)
             else:
                 self.cantidades[self.productos.index(x)]+=1
+        for x in ("Atenuador Dimmer de Encastre",):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(math.ceil(ambiente["cantBocas"]/5))
+            else:
+                self.cantidades[self.productos.index(x)]+=math.ceil(ambiente["cantBocas"]/5)
 
 
     @Rule(AS.ambiente<<Ambiente(id=MATCH.id,aspectos=MATCH.p & P(lambda p: "Iluminacion" in p),usarED=True,usarAI=False,iluminacion="Fija",ventanas=True
@@ -262,12 +293,24 @@ class motorInferencia(KnowledgeEngine):
         p.remove("Iluminacion")
         self.resultado[id]=self.actualizar(ambiente,modulosIlu=("Actuador Telerruptor 2CH","Actuador Shusters 2CH Blanco"),
                     equipoIlu=("Sensor de Movimiento","Sensor Crepuscular","Motor para cortinas"),aspectos=tuple(p))
-        for x in ("Actuador Telerruptor 2CH","Actuador Shusters 2CH Blanco","Sensor de Movimiento","Sensor Crepuscular","Motor para cortinas"):
+        for x in ("Sensor de Movimiento","Sensor Crepuscular"):
             if x not in self.productos:
                 self.productos.append(x)
                 self.cantidades.append(1)
             else:
                 self.cantidades[self.productos.index(x)]+=1
+        for x in ("Actuador Telerruptor 2CH",):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(math.ceil(ambiente["cantBocas"]/5))
+            else:
+                self.cantidades[self.productos.index(x)]+=math.ceil(ambiente["cantBocas"]/5)
+        for x in ("Actuador Shusters 2CH Blanco","Motor para cortinas"):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(ambiente["cantVent"])
+            else:
+                self.cantidades[self.productos.index(x)]+=ambiente["cantVent"]
     
         
     @Rule(AS.ambiente<<Ambiente(id=MATCH.id,aspectos=MATCH.p & P(lambda p: "Iluminacion" in p),usarED=True,usarAI=False,iluminacion="Atenuada",ventanas=True
@@ -277,12 +320,28 @@ class motorInferencia(KnowledgeEngine):
         p.remove("Iluminacion")
         self.resultado[id]=self.actualizar(ambiente,modulosIlu=("Atenuador Dimmer de Encastre","Actuador Shusters 2CH Blanco"),
                     equipoIlu=("Sensor de Movimiento","Sensor Crepuscular","Motor para cortinas"),aspectos=tuple(p))
-        for x in ("Atenuador Dimmer de Encastre","Actuador Shusters 2CH Blanco","Sensor de Movimiento","Sensor Crepuscular","Motor para cortinas"):
+        for x in ("Sensor de Movimiento","Sensor Crepuscular"):
             if x not in self.productos:
                 self.productos.append(x)
                 self.cantidades.append(1)
             else:
                 self.cantidades[self.productos.index(x)]+=1
+
+        for x in ("Atenuador Dimmer de Encastre",):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(math.ceil(ambiente["cantBocas"]/5))
+            else:
+                self.cantidades[self.productos.index(x)]+=math.ceil(ambiente["cantBocas"]/5)
+
+        for x in ("Actuador Shusters 2CH Blanco","Motor para cortinas"):
+            if x not in self.productos:
+                self.productos.append(x)
+                self.cantidades.append(ambiente["cantVent"])
+            else:
+                self.cantidades[self.productos.index(x)]+=ambiente["cantVent"]
+
+
 
         
     
